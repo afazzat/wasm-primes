@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WASM Primes Demo</title>
+</head>
+<body>
+    <!-- User input field for the limit -->
+    <input type="number" id="limit" value="100" min="2" />
+    <!-- Button to trigger prime generation -->
+    <button id="generateButton">Generate Primes</button>
+    <!-- Output area to display results/errors -->
+    <pre id="output"></pre>
+
+    <script type="module">
+        // Import WASM module and functions
+        import init, { generate_primes } from './pkg/wasm_primes.js';
+
+        // Initialize WASM when the page loads
+        (async function initialize() {
+            await init(); // Load and compile WASM
+            console.log("WASM module initialized");
+        })();
+
+        // Add click handler for the generate button
+        document.getElementById("generateButton").addEventListener("click", async () => {
+            const limitInput = document.getElementById("limit");
+            const output = document.getElementById("output");
+            
+            try {
+                const limit = parseInt(limitInput.value);
+                console.time("Prime Generation"); // Start performance profiling
+                
+                // Call Rust-generated WASM function
+                const primes = generate_primes(limit);
+                
+                // Display results
+                output.textContent = primes.join(", ");
+                console.timeEnd("Prime Generation"); // End profiling
+            } catch (err) {
+                // Handle errors from Rust or JS
+                output.textContent = "Error: " + err;
+                console.error(err);
+            }
+        });
+    </script>
+</body>
+</html>
