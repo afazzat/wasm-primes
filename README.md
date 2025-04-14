@@ -1,6 +1,6 @@
 # WASM Prime Generator
 
-A Rust WebAssembly project demonstrating:
+A Rust WebAssembly for fun:
 - Prime number generation using Sieve of Eratosthenes
 - Error handling between Rust and JavaScript
 - WASM optimization techniques
